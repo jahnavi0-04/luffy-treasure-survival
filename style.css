@@ -1,7 +1,10 @@
 body {
   margin: 0;
+  padding: 0;
   overflow: hidden;
-  background: #183d24;
+  width: 100%;
+  height: 100%;
+  background: #000;
 }
 
 canvas {
@@ -42,7 +45,12 @@ canvas {
     display: flex;
   }
 
-  #gameCanvas,
+  #gameCanvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+}
   #mobileControls,
   #attackBtn,
   #restartBtn,
