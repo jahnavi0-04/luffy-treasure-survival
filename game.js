@@ -147,18 +147,22 @@ window.addEventListener("click", () => {
 });
 
 if (restartBtn) {
-  restartBtn.addEventListener("click", (e) => {
+  function restartFromButton(e) {
     e.preventDefault();
     e.stopPropagation();
+
+    showStats = false;
 
     restartGame();
     gameStarted = true;
     gameOver = false;
 
     bgm.play().catch(() => {});
-
     showGameControls();
-  });
+  }
+
+  restartBtn.addEventListener("click", restartFromButton);
+  restartBtn.addEventListener("touchstart", restartFromButton);
 }
 
 if (statsBtn) {
