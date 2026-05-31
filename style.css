@@ -1,0 +1,91 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background: #183d24;
+}
+
+canvas {
+  display: block;
+
+  background:
+    radial-gradient(circle at 20% 20%, #3f7d47 0%, #2f6b3f 40%, #245332 100%);
+}
+
+#mobileControls {
+  position: fixed;
+  bottom: 25px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+#joystick {
+  width: 120px;
+  height: 120px;
+  margin-left: 35px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  position: relative;
+  pointer-events: auto;
+}
+
+#stick {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+  position: absolute;
+  left: 32px;
+  top: 32px;
+}
+
+#attackBtn {
+  margin-right: 35px;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,80,80,0.85);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  pointer-events: auto;
+}
+
+#restartBtn {
+  position: fixed;
+  left: 50%;
+  top: 72%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 70px;
+  border: none;
+  border-radius: 20px;
+  background: #ff4444;
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  display: none;
+  z-index: 1000;
+}
+
+#statsBtn {
+  position: fixed;
+  left: 50%;
+  top: 82%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 60px;
+  border: none;
+  border-radius: 18px;
+  background: #ffd700;
+  color: black;
+  font-size: 26px;
+  font-weight: bold;
+  display: none;
+  z-index: 2000;
+  pointer-events: auto;
+}
