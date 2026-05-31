@@ -22,6 +22,35 @@ canvas {
   pointer-events: none;
 }
 
+#rotateMessage {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #000;
+  color: #ffd700;
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+
+@media screen and (orientation: portrait) {
+  #rotateMessage {
+    display: flex;
+  }
+
+  #gameCanvas,
+  #mobileControls,
+  #attackBtn,
+  #restartBtn,
+  #statsBtn {
+    display: none !important;
+  }
+}
+
 #joystick {
   width: 120px;
   height: 120px;
@@ -53,6 +82,7 @@ canvas {
   font-size: 18px;
   font-weight: bold;
   pointer-events: auto;
+  touch-action: manipulation;
 }
 
 #restartBtn {
@@ -69,7 +99,9 @@ canvas {
   font-size: 28px;
   font-weight: bold;
   display: none;
-  z-index: 1000;
+  z-index: 2000;
+  pointer-events: auto;
+  touch-action: manipulation;
 }
 
 #statsBtn {
@@ -88,4 +120,5 @@ canvas {
   display: none;
   z-index: 2000;
   pointer-events: auto;
+  touch-action: manipulation;
 }
