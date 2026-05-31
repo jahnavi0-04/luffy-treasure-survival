@@ -67,6 +67,7 @@ canvas {
   background: rgba(255,255,255,0.25);
   position: relative;
   pointer-events: auto;
+  touch-action: none;
 }
 
 #stick {
@@ -75,8 +76,9 @@ canvas {
   border-radius: 50%;
   background: rgba(255,255,255,0.7);
   position: absolute;
-  left: 32px;
-  top: 32px;
+  left: 50%;
+  top: 50%;
+  transform: translate(0px, 0px);
 }
 
 #attackBtn {
