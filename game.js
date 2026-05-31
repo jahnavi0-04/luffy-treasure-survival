@@ -108,10 +108,10 @@ const unlockedAchievements = [];
 const achievementPopups = [];
 
 const island = {
-  x: 120,
-  y: 80,
-  width: canvas.width - 240,
-  height: canvas.height - 160
+  x: 0,
+  y: 0,
+  width: canvas.width,
+  height: canvas.height
 };
 
 function showGameControls() {
@@ -284,8 +284,8 @@ if (joystick && stick) {
 }
 
 function keepInsideIsland(obj) {
-  obj.x = Math.max(island.x, Math.min(island.x + island.width - obj.size, obj.x));
-  obj.y = Math.max(island.y, Math.min(island.y + island.height - obj.size, obj.y));
+  obj.x = Math.max(0, Math.min(canvas.width - obj.size, obj.x));
+  obj.y = Math.max(0, Math.min(canvas.height - obj.size, obj.y));
 }
 
 function updateDifficulty() {
