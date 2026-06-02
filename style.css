@@ -30,6 +30,8 @@ canvas {
   background: rgba(255,255,255,0.25);
   position: relative;
   pointer-events: auto;
+  touch-action: none;
+  user-select: none;
 }
 
 #stick {
@@ -40,6 +42,7 @@ canvas {
   position: absolute;
   left: 32px;
   top: 32px;
+  touch-action: none;
 }
 
 #attackBtn {
