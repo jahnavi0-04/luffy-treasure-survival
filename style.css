@@ -58,24 +58,24 @@ canvas {
 #restartBtn {
   position: fixed;
   left: 50%;
-  top: 72%;
+  top: 58%;
   transform: translateX(-50%);
   width: 220px;
-  height: 70px;
+  height: 60px;
   border: none;
-  border-radius: 20px;
+  border-radius: 18px;
   background: #ff4444;
   color: white;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: bold;
   display: none;
-  z-index: 1000;
+  z-index: 3000;
 }
 
 #statsBtn {
   position: fixed;
   left: 50%;
-  top: 82%;
+  top: 74%;
   transform: translateX(-50%);
   width: 220px;
   height: 60px;
@@ -86,6 +86,5 @@ canvas {
   font-size: 26px;
   font-weight: bold;
   display: none;
-  z-index: 2000;
-  pointer-events: auto;
+  z-index: 3000;
 }
