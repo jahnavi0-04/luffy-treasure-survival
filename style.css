@@ -38,10 +38,11 @@ canvas {
   width: 55px;
   height: 55px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.8);
   position: absolute;
   left: 32px;
   top: 32px;
+  transform: translate(0px,0px);
   touch-action: none;
 }
 
@@ -61,7 +62,7 @@ canvas {
 #restartBtn {
   position: fixed;
   left: 50%;
-  top: 58%;
+  top: 60%;
   transform: translateX(-50%);
   width: 220px;
   height: 60px;
@@ -78,7 +79,7 @@ canvas {
 #statsBtn {
   position: fixed;
   left: 50%;
-  top: 74%;
+  top: 78%;
   transform: translateX(-50%);
   width: 220px;
   height: 60px;
