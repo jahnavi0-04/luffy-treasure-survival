@@ -60,25 +60,29 @@ canvas {
 }
 
 #joystick {
+  position: fixed;
+  left: 35px;
+  bottom: 35px;
   width: 120px;
   height: 120px;
-  margin-left: 35px;
   border-radius: 50%;
   background: rgba(255,255,255,0.25);
-  position: relative;
-  pointer-events: auto;
+  border: 3px solid rgba(255,255,255,0.6);
+  z-index: 2000;
   touch-action: none;
+  user-select: none;
 }
 
 #stick {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.7);
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(0px, 0px);
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.8);
+  transform: translate(-50%, -50%);
+  touch-action: none;
 }
 
 #attackBtn {
