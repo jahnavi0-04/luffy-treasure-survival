@@ -244,19 +244,18 @@ if (attackBtn) {
 }
 
 if (joystick && stick) {
-  function handleJoystickMove(e) {
-    e.preventDefault();
+  let joystickActive = false;
 
-    const touch = e.touches[0];
+  function moveStick(clientX, clientY) {
     const rect = joystick.getBoundingClientRect();
 
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
-    let dx = touch.clientX - centerX;
-    let dy = touch.clientY - centerY;
+    let dx = clientX - centerX;
+    let dy = clientY - centerY;
 
-    const maxDistance = 45;
+    const maxDistance = rect.width / 2 - 25;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance > maxDistance) {
@@ -264,22 +263,41 @@ if (joystick && stick) {
       dy = (dy / distance) * maxDistance;
     }
 
-    stick.style.transform = `translate(${dx}px, ${dy}px)`;
+    stick.style.left = "50%";
+    stick.style.top = "50%";
+    stick.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
 
     touchMoveX = dx / maxDistance;
     touchMoveY = dy / maxDistance;
   }
 
-  joystick.addEventListener("touchstart", handleJoystickMove, { passive: false });
-  joystick.addEventListener("touchmove", handleJoystickMove, { passive: false });
+  joystick.addEventListener("touchstart", (e) => {
+    e.preventDefault();
+    joystickActive = true;
+
+    const touch = e.touches[0];
+    moveStick(touch.clientX, touch.clientY);
+  }, { passive: false });
+
+  joystick.addEventListener("touchmove", (e) => {
+    e.preventDefault();
+
+    if (!joystickActive) return;
+
+    const touch = e.touches[0];
+    moveStick(touch.clientX, touch.clientY);
+  }, { passive: false });
 
   joystick.addEventListener("touchend", (e) => {
     e.preventDefault();
 
+    joystickActive = false;
     touchMoveX = 0;
     touchMoveY = 0;
 
-    stick.style.transform = "translate(0px, 0px)";
+    stick.style.left = "50%";
+    stick.style.top = "50%";
+    stick.style.transform = "translate(-50%, -50%)";
   }, { passive: false });
 }
 
