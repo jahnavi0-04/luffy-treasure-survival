@@ -1,16 +1,8 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-
-resizeCanvas();
-
-window.addEventListener("resize", () => {
-  resizeCanvas();
-});
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 const mobileControls = document.getElementById("mobileControls");
 const joystick = document.getElementById("joystick");
@@ -108,10 +100,10 @@ const unlockedAchievements = [];
 const achievementPopups = [];
 
 const island = {
-  x: 0,
-  y: 0,
-  width: canvas.width,
-  height: canvas.height
+  x: 120,
+  y: 80,
+  width: canvas.width - 240,
+  height: canvas.height - 160
 };
 
 function showGameControls() {
@@ -155,22 +147,18 @@ window.addEventListener("click", () => {
 });
 
 if (restartBtn) {
-  function restartFromButton(e) {
+  restartBtn.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
-
-    showStats = false;
 
     restartGame();
     gameStarted = true;
     gameOver = false;
 
     bgm.play().catch(() => {});
-    showGameControls();
-  }
 
-  restartBtn.addEventListener("click", restartFromButton);
-  restartBtn.addEventListener("touchstart", restartFromButton);
+    showGameControls();
+  });
 }
 
 if (statsBtn) {
@@ -244,66 +232,44 @@ if (attackBtn) {
 }
 
 if (joystick && stick) {
-  let joystickActive = false;
+  joystick.addEventListener("touchmove", (e) => {
+    e.preventDefault();
 
-  function moveStick(clientX, clientY) {
     const rect = joystick.getBoundingClientRect();
+    const touch = e.touches[0];
 
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
-    let dx = clientX - centerX;
-    let dy = clientY - centerY;
+    let dx = touch.clientX - centerX;
+    let dy = touch.clientY - centerY;
 
-    const maxDistance = rect.width / 2 - 25;
     const distance = Math.sqrt(dx * dx + dy * dy);
+    const maxDistance = 45;
 
     if (distance > maxDistance) {
       dx = (dx / distance) * maxDistance;
       dy = (dy / distance) * maxDistance;
     }
 
-    stick.style.left = "50%";
-    stick.style.top = "50%";
-    stick.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+    stick.style.left = 32 + dx + "px";
+    stick.style.top = 32 + dy + "px";
 
     touchMoveX = dx / maxDistance;
     touchMoveY = dy / maxDistance;
-  }
+  });
 
-  joystick.addEventListener("touchstart", (e) => {
-    e.preventDefault();
-    joystickActive = true;
-
-    const touch = e.touches[0];
-    moveStick(touch.clientX, touch.clientY);
-  }, { passive: false });
-
-  joystick.addEventListener("touchmove", (e) => {
-    e.preventDefault();
-
-    if (!joystickActive) return;
-
-    const touch = e.touches[0];
-    moveStick(touch.clientX, touch.clientY);
-  }, { passive: false });
-
-  joystick.addEventListener("touchend", (e) => {
-    e.preventDefault();
-
-    joystickActive = false;
+  joystick.addEventListener("touchend", () => {
     touchMoveX = 0;
     touchMoveY = 0;
-
-    stick.style.left = "50%";
-    stick.style.top = "50%";
-    stick.style.transform = "translate(-50%, -50%)";
-  }, { passive: false });
+    stick.style.left = "32px";
+    stick.style.top = "32px";
+  });
 }
 
 function keepInsideIsland(obj) {
-  obj.x = Math.max(0, Math.min(canvas.width - obj.size, obj.x));
-  obj.y = Math.max(0, Math.min(canvas.height - obj.size, obj.y));
+  obj.x = Math.max(island.x, Math.min(island.x + island.width - obj.size, obj.x));
+  obj.y = Math.max(island.y, Math.min(island.y + island.height - obj.size, obj.y));
 }
 
 function updateDifficulty() {
