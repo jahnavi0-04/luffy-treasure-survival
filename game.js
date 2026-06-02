@@ -233,11 +233,11 @@ if (attackBtn) {
 
 if (joystick && stick) {
 
-  function updateJoystick(e) {
-    e.preventDefault();
+  let joystickActive = false;
+
+  function handleJoystick(touch) {
 
     const rect = joystick.getBoundingClientRect();
-    const touch = e.touches[0];
 
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
@@ -245,7 +245,7 @@ if (joystick && stick) {
     let dx = touch.clientX - centerX;
     let dy = touch.clientY - centerY;
 
-    const maxDistance = 40;
+    const maxDistance = 45;
 
     const distance = Math.sqrt(dx * dx + dy * dy);
 
@@ -254,44 +254,34 @@ if (joystick && stick) {
       dy = (dy / distance) * maxDistance;
     }
 
-    stick.style.left = (32 + dx) + "px";
-    stick.style.top = (32 + dy) + "px";
+    stick.style.transform =
+      `translate(${dx}px, ${dy}px)`;
 
     touchMoveX = dx / maxDistance;
     touchMoveY = dy / maxDistance;
   }
 
-  joystick.addEventListener("touchstart", updateJoystick, {
-    passive: false
-  });
-
-  joystick.addEventListener("touchmove", updateJoystick, {
-    passive: false
-  });
-
-  joystick.addEventListener("touchend", (e) => {
+  joystick.addEventListener("touchstart", (e) => {
+    joystickActive = true;
+    handleJoystick(e.touches[0]);
     e.preventDefault();
+  }, { passive: false });
 
+  joystick.addEventListener("touchmove", (e) => {
+    if (!joystickActive) return;
+    handleJoystick(e.touches[0]);
+    e.preventDefault();
+  }, { passive: false });
+
+  function resetJoystick() {
+    joystickActive = false;
     touchMoveX = 0;
     touchMoveY = 0;
+    stick.style.transform = "translate(0px,0px)";
+  }
 
-    stick.style.left = "32px";
-    stick.style.top = "32px";
-  }, {
-    passive: false
-  });
-
-  joystick.addEventListener("touchcancel", (e) => {
-    e.preventDefault();
-
-    touchMoveX = 0;
-    touchMoveY = 0;
-
-    stick.style.left = "32px";
-    stick.style.top = "32px";
-  }, {
-    passive: false
-  });
+  joystick.addEventListener("touchend", resetJoystick);
+  joystick.addEventListener("touchcancel", resetJoystick);
 }
 
 function keepInsideIsland(obj) {
