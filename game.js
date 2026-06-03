@@ -100,10 +100,10 @@ const unlockedAchievements = [];
 const achievementPopups = [];
 
 const island = {
-  x: 120,
-  y: 80,
-  width: canvas.width - 240,
-  height: canvas.height - 160
+  x: 0,
+  y: 0,
+  width: canvas.width,
+  height: canvas.height
 };
 
 function showGameControls() {
@@ -232,12 +232,11 @@ if (attackBtn) {
 }
 
 if (joystick && stick) {
-
-  let joystickActive = false;
-
-  function handleJoystick(touch) {
+  joystick.addEventListener("touchmove", (e) => {
+    e.preventDefault();
 
     const rect = joystick.getBoundingClientRect();
+    const touch = e.touches[0];
 
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
@@ -245,48 +244,32 @@ if (joystick && stick) {
     let dx = touch.clientX - centerX;
     let dy = touch.clientY - centerY;
 
-    const maxDistance = 45;
-
     const distance = Math.sqrt(dx * dx + dy * dy);
+    const maxDistance = 45;
 
     if (distance > maxDistance) {
       dx = (dx / distance) * maxDistance;
       dy = (dy / distance) * maxDistance;
     }
 
-    stick.style.transform =
-      `translate(${dx}px, ${dy}px)`;
+    stick.style.left = 32 + dx + "px";
+    stick.style.top = 32 + dy + "px";
 
     touchMoveX = dx / maxDistance;
     touchMoveY = dy / maxDistance;
-  }
+  });
 
-  joystick.addEventListener("touchstart", (e) => {
-    joystickActive = true;
-    handleJoystick(e.touches[0]);
-    e.preventDefault();
-  }, { passive: false });
-
-  joystick.addEventListener("touchmove", (e) => {
-    if (!joystickActive) return;
-    handleJoystick(e.touches[0]);
-    e.preventDefault();
-  }, { passive: false });
-
-  function resetJoystick() {
-    joystickActive = false;
+  joystick.addEventListener("touchend", () => {
     touchMoveX = 0;
     touchMoveY = 0;
-    stick.style.transform = "translate(0px,0px)";
-  }
-
-  joystick.addEventListener("touchend", resetJoystick);
-  joystick.addEventListener("touchcancel", resetJoystick);
+    stick.style.left = "32px";
+    stick.style.top = "32px";
+  });
 }
 
 function keepInsideIsland(obj) {
-  obj.x = Math.max(island.x, Math.min(island.x + island.width - obj.size, obj.x));
-  obj.y = Math.max(island.y, Math.min(island.y + island.height - obj.size, obj.y));
+  obj.x = Math.max(0, Math.min(canvas.width - obj.size, obj.x));
+  obj.y = Math.max(0, Math.min(canvas.height - obj.size, obj.y));
 }
 
 function updateDifficulty() {
