@@ -130,8 +130,19 @@ function hideAllControls() {
   if (statsBtn) statsBtn.style.display = "none";
 }
 
-function startGame() {
+async function startGame() {
   if (!gameStarted && !gameOver) {
+    try {
+      if (document.documentElement.requestFullscreen) {
+        await document.documentElement.requestFullscreen();
+      }
+
+      if (screen.orientation && screen.orientation.lock) {
+        await screen.orientation.lock("landscape");
+      }
+    } catch (err) {
+      console.log("Fullscreen not supported:", err);
+    }
 
     bgm.play().catch(() => {});
 
@@ -1270,6 +1281,15 @@ function drawStatsScreen() {
 
 }
 
+function drawFullscreenPrompt() {
+  ctx.fillStyle = "rgba(0,0,0,0.65)";
+  ctx.fillRect(canvas.width / 2 - 160, canvas.height - 95, 320, 60);
+
+  ctx.fillStyle = "#ffd700";
+  ctx.font = "28px Arial";
+  ctx.fillText("FULLSCREEN", canvas.width / 2 - 85, canvas.height - 55);
+}
+
 function drawUI() {
   // Background panel
   ctx.fillStyle = "rgba(0,0,0,0.45)";
@@ -1331,11 +1351,12 @@ function gameLoop() {
   ctx.translate(shakeX, shakeY);
 
   if (!gameStarted) {
-    drawStartScreen();
-    ctx.restore();
-    requestAnimationFrame(gameLoop);
-    return;
-  }
+  drawStartScreen();
+  drawFullscreenPrompt();
+  ctx.restore();
+  requestAnimationFrame(gameLoop);
+  return;
+}
 
   if (!gameOver) {
     if (score >= nextBossScore && !boss) {
