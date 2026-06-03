@@ -65,10 +65,10 @@ canvas {
 #restartBtn {
   position: fixed;
   left: 50%;
-  top: 68%;
+  top: 64%;
   transform: translateX(-50%);
   width: 220px;
-  height: 70px;
+  height: 65px;
   border: none;
   border-radius: 20px;
   background: #ff4444;
@@ -83,7 +83,7 @@ canvas {
 #statsBtn {
   position: fixed;
   left: 50%;
-  top: 88%;
+  top: 78%;
   transform: translateX(-50%);
   width: 220px;
   height: 60px;
