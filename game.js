@@ -1,8 +1,16 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
+window.addEventListener("load", () => {
+    gameLoop();
+});
+
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 
 const mobileControls = document.getElementById("mobileControls");
 const joystick = document.getElementById("joystick");
@@ -388,7 +396,7 @@ function spawnBoss() {
   boss = {
     x: 250,
     y: 180,
-    size: 240,
+    size: 140,
     speed: 1.4 + bossLevel * 0.05,
     hp: bossHp,
     maxHp: bossHp,
@@ -1247,7 +1255,7 @@ function drawAchievementPopups() {
   achievementPopups.forEach((popup, index) => {
     ctx.fillStyle = "#ffd700";
     ctx.font = "32px Arial";
-    ctx.fillText(popup.text, canvas.width / 2 - 120, 120);
+    ctx.fillText(popup.text, canvas.width / 2 - 120, 70);
 
     popup.life--;
 
@@ -1269,25 +1277,15 @@ function drawStatsScreen() {
   ctx.fillStyle = "white";
   ctx.font = "26px Arial";
 
-  ctx.fillText("🏆 High Score: " + highScore, 80, 180);
-  ctx.fillText("🗺️ Maps Collected: " + mapsCollected, 80, 230);
-  ctx.fillText("💰 Chests Opened: " + chestsOpened, 80, 280);
-  ctx.fillText("🍖 Meat Collected: " + meatCollected, 80, 330);
-  ctx.fillText("👑 Bosses Defeated: " + bossesDefeated, 80, 380);
-  ctx.fillText("⏱️ Longest Run: " + longestRun + "s", 80, 430);
-
+  ctx.fillText("🏆 High Score: " + highScore, 80, 150);
+  ctx.fillText("🗺️ Maps Collected: " + mapsCollected, 80, 190);
+  ctx.fillText("💰 Chests Opened: " + chestsOpened, 80, 230);
+  ctx.fillText("🍖 Meat Collected: " + meatCollected, 80, 270);
+  ctx.fillText("👑 Bosses Defeated: " + bossesDefeated, 80, 310);
+  ctx.fillText("⏱️ Longest Run: " + longestRun + "s", 80, 350);
   ctx.fillStyle = "#ffd700";
   ctx.font = "22px Arial";
 
-}
-
-function drawFullscreenPrompt() {
-  ctx.fillStyle = "rgba(0,0,0,0.65)";
-  ctx.fillRect(canvas.width / 2 - 160, canvas.height - 95, 320, 60);
-
-  ctx.fillStyle = "#ffd700";
-  ctx.font = "28px Arial";
-  ctx.fillText("FULLSCREEN", canvas.width / 2 - 85, canvas.height - 55);
 }
 
 function drawUI() {
@@ -1325,15 +1323,15 @@ function drawGameOver() {
 
   ctx.fillStyle = "white";
   ctx.font = "60px Arial";
-  ctx.fillText("GAME OVER", canvas.width / 2 - 180, canvas.height / 2);
+  ctx.fillText("GAME OVER", canvas.width / 2 - 180, canvas.height / 2 - 120);
 
   ctx.font = "30px Arial";
-  ctx.fillText("Final Score: " + score, canvas.width / 2 - 100, canvas.height / 2 + 50);
-  ctx.fillText("High Score: " + highScore, canvas.width / 2 - 100, canvas.height / 2 + 90);
+  ctx.fillText("Final Score: " + score, canvas.width / 2 - 100, canvas.height / 2 - 50);
+  ctx.fillText("High Score: " + highScore, canvas.width / 2 - 100, canvas.height / 2 - 10);
 
   ctx.fillStyle = "#ffd700";
-ctx.font = "24px Arial";
-ctx.fillText("Tap RESTART button to play again", canvas.width / 2 - 170, canvas.height / 2 + 140);
+  ctx.font = "24px Arial";
+  ctx.fillText("Tap RESTART button to play again", canvas.width / 2 - 170, canvas.height / 2 + 140);
 
   ctx.font = "24px Arial";
   ctx.fillStyle = "#ffd700";
@@ -1352,7 +1350,6 @@ function gameLoop() {
 
   if (!gameStarted) {
   drawStartScreen();
-  drawFullscreenPrompt();
   ctx.restore();
   requestAnimationFrame(gameLoop);
   return;
@@ -1442,4 +1439,3 @@ spawnEnemy();
 spawnGem();
 spawnMeat();
 spawnChest();
-gameLoop();
