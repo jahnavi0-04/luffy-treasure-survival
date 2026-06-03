@@ -20,6 +20,8 @@ canvas {
   justify-content: space-between;
   align-items: center;
   pointer-events: none;
+  touch-action: none;
+  user-select: none;
 }
 
 #joystick {
@@ -38,12 +40,12 @@ canvas {
   width: 55px;
   height: 55px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.7);
   position: absolute;
   left: 32px;
   top: 32px;
-  transform: translate(0px,0px);
   touch-action: none;
+  user-select: none;
 }
 
 #attackBtn {
@@ -57,29 +59,31 @@ canvas {
   font-size: 18px;
   font-weight: bold;
   pointer-events: auto;
+  touch-action: manipulation;
 }
 
 #restartBtn {
   position: fixed;
   left: 50%;
-  top: 60%;
+  top: 72%;
   transform: translateX(-50%);
   width: 220px;
-  height: 60px;
+  height: 70px;
   border: none;
-  border-radius: 18px;
+  border-radius: 20px;
   background: #ff4444;
   color: white;
-  font-size: 26px;
+  font-size: 28px;
   font-weight: bold;
   display: none;
-  z-index: 3000;
+  pointer-events: auto;
+  z-index: 2000;
 }
 
 #statsBtn {
   position: fixed;
   left: 50%;
-  top: 78%;
+  top: 82%;
   transform: translateX(-50%);
   width: 220px;
   height: 60px;
@@ -90,5 +94,6 @@ canvas {
   font-size: 26px;
   font-weight: bold;
   display: none;
-  z-index: 3000;
+  z-index: 2000;
+  pointer-events: auto;
 }
