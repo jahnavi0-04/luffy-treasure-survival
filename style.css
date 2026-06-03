@@ -97,21 +97,3 @@ canvas {
   z-index: 2000;
   pointer-events: auto;
 }
-
-#fullscreenBtn {
-  position: fixed;
-  left: 50%;
-  bottom: 25px;
-  transform: translateX(-50%);
-  width: 260px;
-  height: 65px;
-  border: none;
-  border-radius: 18px;
-  background: #ffd700;
-  color: black;
-  font-size: 24px;
-  font-weight: bold;
-  z-index: 9999;
-  pointer-events: auto;
-  display: block;
-}
