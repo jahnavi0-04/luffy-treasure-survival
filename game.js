@@ -11,9 +11,8 @@ const attackBtn = document.getElementById("attackBtn");
 const restartBtn = document.getElementById("restartBtn");
 const statsBtn = document.getElementById("statsBtn");
 const fullscreenBtn = document.getElementById("fullscreenBtn");
-
+if (fullscreenBtn) fullscreenBtn.style.display = "block";
 if (statsBtn) statsBtn.style.display = "none";
-if (fullscreenBtn) fullscreenBtn.style.display = "none";
 if (mobileControls) mobileControls.style.display = "flex";
 if (joystick) joystick.style.display = "none";
 if (attackBtn) attackBtn.style.display = "none";
