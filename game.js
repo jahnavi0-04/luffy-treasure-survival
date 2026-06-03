@@ -181,17 +181,29 @@ if (restartBtn) {
 
 if (statsBtn) {
   function toggleStats(e) {
-    e.preventDefault();
-    e.stopPropagation();
+  e.preventDefault();
+  e.stopPropagation();
 
-    if (gameOver) {
-      showStats = !showStats;
+  if (gameOver) {
+    showStats = !showStats;
+
+    if (showStats) {
+      if (restartBtn) restartBtn.style.display = "none";
+      if (statsBtn) statsBtn.style.display = "none";
+    } else {
+      showGameOverControls();
     }
   }
-
-  statsBtn.addEventListener("click", toggleStats);
-  statsBtn.addEventListener("touchstart", toggleStats);
+};
 }
+
+window.addEventListener("touchstart", (e) => {
+  if (gameOver && showStats) {
+    e.preventDefault();
+    showStats = false;
+    showGameOverControls();
+  }
+});
 
 function playAttackSound() {
   const sound = new Audio("assets/sounds/attack.mp3");
