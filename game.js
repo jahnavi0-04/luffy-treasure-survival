@@ -10,8 +10,10 @@ const stick = document.getElementById("stick");
 const attackBtn = document.getElementById("attackBtn");
 const restartBtn = document.getElementById("restartBtn");
 const statsBtn = document.getElementById("statsBtn");
-if (statsBtn) statsBtn.style.display = "none";
+const fullscreenBtn = document.getElementById("fullscreenBtn");
 
+if (statsBtn) statsBtn.style.display = "none";
+if (fullscreenBtn) fullscreenBtn.style.display = "none";
 if (mobileControls) mobileControls.style.display = "flex";
 if (joystick) joystick.style.display = "none";
 if (attackBtn) attackBtn.style.display = "none";
@@ -111,6 +113,7 @@ function showGameControls() {
   if (attackBtn) attackBtn.style.display = "block";
   if (restartBtn) restartBtn.style.display = "none";
   if (statsBtn) statsBtn.style.display = "none";
+  if (fullscreenBtn) fullscreenBtn.style.display = "none";
 }
 
 function showGameOverControls() {
@@ -118,6 +121,7 @@ function showGameOverControls() {
   if (attackBtn) attackBtn.style.display = "none";
   if (restartBtn) restartBtn.style.display = "block";
   if (statsBtn) statsBtn.style.display = "block";
+  if (fullscreenBtn) fullscreenBtn.style.display = "none";
 }
 
 function hideAllControls() {
@@ -228,6 +232,28 @@ if (attackBtn) {
     e.preventDefault();
     e.stopPropagation();
     startAttack();
+  });
+}
+
+if (fullscreenBtn) {
+  fullscreenBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      if (document.documentElement.requestFullscreen) {
+        await document.documentElement.requestFullscreen();
+      }
+
+      if (screen.orientation && screen.orientation.lock) {
+        await screen.orientation.lock("landscape");
+      }
+    } catch (err) {
+      console.log("Fullscreen/landscape not supported:", err);
+    }
+
+    fullscreenBtn.style.display = "none";
+    startGame();
   });
 }
 
