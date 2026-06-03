@@ -1261,11 +1261,11 @@ function drawStatsScreen() {
   ctx.fillText("📊 Statistics", canvas.width / 2 - 120, 70);
 
   ctx.fillStyle = "rgba(0,0,0,0.55)";
-  ctx.fillRect(55, 95, canvas.width - 110, 260);
+  ctx.fillRect(55, 95, canvas.width - 110, 320);
 
   ctx.strokeStyle = "#ffd700";
   ctx.lineWidth = 3;
-  ctx.strokeRect(55, 95, canvas.width - 110, 260);
+  ctx.strokeRect(55, 95, canvas.width - 110, 320);
 
   ctx.fillStyle = "white";
   ctx.font = "24px Arial";
