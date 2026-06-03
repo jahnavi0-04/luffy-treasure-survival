@@ -103,14 +103,15 @@ canvas {
   left: 50%;
   bottom: 25px;
   transform: translateX(-50%);
-  width: 240px;
-  height: 60px;
+  width: 260px;
+  height: 65px;
   border: none;
   border-radius: 18px;
   background: #ffd700;
   color: black;
   font-size: 24px;
   font-weight: bold;
-  z-index: 4000;
+  z-index: 9999;
   pointer-events: auto;
+  display: block;
 }
