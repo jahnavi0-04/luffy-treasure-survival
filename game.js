@@ -261,6 +261,15 @@ if (attackBtn) {
   });
 }
 
+canvas.addEventListener("click", () => {
+  if (showStats) {
+    showStats = false;
+
+    restartBtn.style.display = "block";
+    statsBtn.style.display = "block";
+  }
+});
+
 
 if (joystick && stick) {
   joystick.addEventListener("touchmove", (e) => {
@@ -1288,6 +1297,14 @@ function drawStatsScreen() {
   ctx.fillText("🍖 Meat Collected: " + meatCollected, 80, 255);
   ctx.fillText("👑 Bosses Defeated: " + bossesDefeated, 80, 295);
   ctx.fillText("⏱️ Longest Run: " + longestRun + "s", 80, 335);
+
+  ctx.fillStyle = "#ffd700";
+ctx.font = "22px Arial";
+ctx.fillText(
+  "Tap anywhere to close",
+  canvas.width / 2 - 90,
+  canvas.height - 40
+);
 }
 
 function drawUI() {
