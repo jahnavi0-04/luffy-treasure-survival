@@ -317,8 +317,8 @@ function keepInsideIsland(obj) {
 }
 
 function updateDifficulty() {
-  maxEnemies = 1 + Math.floor(score / 180);
-  maxEnemies = Math.min(maxEnemies, 6);
+  maxEnemies = 2 + Math.floor(score / 250);
+  maxEnemies = Math.min(maxEnemies, 7);
 
   while (enemies.length < maxEnemies) {
     spawnEnemy();
@@ -380,7 +380,7 @@ function restartGame() {
 
 function spawnEnemy() {
   const zone = enemySpawnZones[Math.floor(Math.random() * enemySpawnZones.length)];
-  const enemySpeed = 1.6 + Math.min(score / 700, 1.8);
+  const enemySpeed = 1.4 + Math.min(score / 900, 1.4);
 
   enemies.push({
     x: zone.x + Math.random() * 120 - 60,
