@@ -317,8 +317,8 @@ function keepInsideIsland(obj) {
 }
 
 function updateDifficulty() {
-  maxEnemies = 1 + Math.floor(score / 120);
-  maxEnemies = Math.min(maxEnemies, 8);
+  maxEnemies = 1 + Math.floor(score / 180);
+  maxEnemies = Math.min(maxEnemies, 6);
 
   while (enemies.length < maxEnemies) {
     spawnEnemy();
@@ -380,7 +380,7 @@ function restartGame() {
 
 function spawnEnemy() {
   const zone = enemySpawnZones[Math.floor(Math.random() * enemySpawnZones.length)];
-  const enemySpeed = 2.3 + Math.min(score / 500, 2.5);
+  const enemySpeed = 1.6 + Math.min(score / 700, 1.8);
 
   enemies.push({
     x: zone.x + Math.random() * 120 - 60,
@@ -855,7 +855,7 @@ function moveEnemies() {
 
     keepInsideIsland(enemy);
 
-    if (distance < player.size) player.hp -= 0.2;
+    if (distance < player.size) player.hp -= 0.12;
 
     if (attacking && distance < attackRadius) {
       enemies.splice(index, 1);
@@ -881,7 +881,7 @@ function moveBoss() {
   boss.x = Math.max(island.x + boss.size / 2, Math.min(island.x + island.width - boss.size / 2, boss.x));
   boss.y = Math.max(island.y + boss.size / 2, Math.min(island.y + island.height - boss.size / 2, boss.y));
 
-  if (distance < boss.size / 2) player.hp -= 0.25;
+  if (distance < boss.size / 2) player.hp -= 0.15;
 
   if (attacking && distance < attackRadius + 60) {
     boss.hp -= 6;
@@ -1253,9 +1253,21 @@ function drawChestEffects() {
 
 function drawAchievementPopups() {
   achievementPopups.forEach((popup, index) => {
+    const boxWidth = 360;
+    const boxHeight = 50;
+    const x = canvas.width / 2 - boxWidth / 2;
+    const y = 45;
+
+    ctx.fillStyle = "rgba(0,0,0,0.65)";
+    ctx.fillRect(x, y, boxWidth, boxHeight);
+
+    ctx.strokeStyle = "#ffd700";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(x, y, boxWidth, boxHeight);
+
     ctx.fillStyle = "#ffd700";
-    ctx.font = "32px Arial";
-    ctx.fillText(popup.text, canvas.width / 2 - 120, 70);
+    ctx.font = "26px Arial";
+    ctx.fillText(popup.text, x + 45, y + 34);
 
     popup.life--;
 
@@ -1266,26 +1278,29 @@ function drawAchievementPopups() {
 }
 
 function drawStatsScreen() {
-
-  ctx.fillStyle = "rgba(0,0,0,0.85)";
+  ctx.fillStyle = "rgba(0,0,0,0.88)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.fillStyle = "#ffd700";
-  ctx.font = "42px Arial";
-  ctx.fillText("📊 Statistics", canvas.width / 2 - 120, 100);
+  ctx.font = "38px Arial";
+  ctx.fillText("📊 Statistics", canvas.width / 2 - 120, 70);
+
+  ctx.fillStyle = "rgba(0,0,0,0.55)";
+  ctx.fillRect(55, 95, canvas.width - 110, 260);
+
+  ctx.strokeStyle = "#ffd700";
+  ctx.lineWidth = 3;
+  ctx.strokeRect(55, 95, canvas.width - 110, 260);
 
   ctx.fillStyle = "white";
-  ctx.font = "26px Arial";
+  ctx.font = "24px Arial";
 
-  ctx.fillText("🏆 High Score: " + highScore, 80, 150);
-  ctx.fillText("🗺️ Maps Collected: " + mapsCollected, 80, 190);
-  ctx.fillText("💰 Chests Opened: " + chestsOpened, 80, 230);
-  ctx.fillText("🍖 Meat Collected: " + meatCollected, 80, 270);
-  ctx.fillText("👑 Bosses Defeated: " + bossesDefeated, 80, 310);
-  ctx.fillText("⏱️ Longest Run: " + longestRun + "s", 80, 350);
-  ctx.fillStyle = "#ffd700";
-  ctx.font = "22px Arial";
-
+  ctx.fillText("🏆 High Score: " + highScore, 80, 135);
+  ctx.fillText("🗺️ Maps Collected: " + mapsCollected, 80, 175);
+  ctx.fillText("💰 Chests Opened: " + chestsOpened, 80, 215);
+  ctx.fillText("🍖 Meat Collected: " + meatCollected, 80, 255);
+  ctx.fillText("👑 Bosses Defeated: " + bossesDefeated, 80, 295);
+  ctx.fillText("⏱️ Longest Run: " + longestRun + "s", 80, 335);
 }
 
 function drawUI() {
@@ -1331,7 +1346,6 @@ function drawGameOver() {
 
   ctx.fillStyle = "#ffd700";
   ctx.font = "24px Arial";
-  ctx.fillText("Tap RESTART button to play again", canvas.width / 2 - 170, canvas.height / 2 + 140);
 
   ctx.font = "24px Arial";
   ctx.fillStyle = "#ffd700";
