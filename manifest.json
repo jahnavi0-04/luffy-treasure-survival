@@ -1,0 +1,21 @@
+{
+  "name": "Luffy Treasure Survival",
+  "short_name": "Luffy Survival",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#183d24",
+  "theme_color": "#183d24",
+  "icons": [
+    {
+      "src": "assets/luffy.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/luffy.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
