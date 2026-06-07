@@ -1261,11 +1261,11 @@ function gameLoop() {
   ctx.translate(shakeX, shakeY);
 
   if (!gameStarted) {
-  drawStartScreen();
-  ctx.restore();
-  requestAnimationFrame(gameLoop);
-  return;
-}
+    drawStartScreen();
+    ctx.restore();
+    requestAnimationFrame(gameLoop);
+    return;
+  }
 
   if (!gameOver) {
     if (score >= nextBossScore && !boss) {
@@ -1310,17 +1310,16 @@ function gameLoop() {
     drawChestEffects();
 
     if (player.hp <= 0) {
+      const runTime = Math.floor((Date.now() - gameStartTime) / 1000);
 
-  const runTime = Math.floor((Date.now() - gameStartTime) / 1000);
+      if (runTime > longestRun) {
+        longestRun = runTime;
+        localStorage.setItem("longestRun", longestRun);
+      }
 
-  if (runTime > longestRun) {
-    longestRun = runTime;
-    localStorage.setItem("longestRun", longestRun);
-  }
-
-  gameOver = true;
-  showGameOverControls();
-}
+      gameOver = true;
+      showGameOverControls();
+    }
 
     if (screenShake > 0) screenShake *= 0.85;
 
@@ -1330,15 +1329,14 @@ function gameLoop() {
     checkAchievements();
     drawAchievementPopups();
 
-    requestAnimationFrame(gameLoop);
-    } else {
+  } else {
     drawMap();
     ctx.restore();
     drawGameOver();
-    requestAnimationFrame(gameLoop);
   }
+
+  requestAnimationFrame(gameLoop);
 }
-    requestAnimationFrame(gameLoop);
 
 spawnEnemy();
 spawnGem();
