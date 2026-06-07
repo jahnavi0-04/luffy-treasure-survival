@@ -1,14 +1,24 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
 
 const mobileControls = document.getElementById("mobileControls");
 const joystick = document.getElementById("joystick");
 const stick = document.getElementById("stick");
 const attackBtn = document.getElementById("attackBtn");
 const restartBtn = document.getElementById("restartBtn");
+
+restartBtn.addEventListener("click", () => {
+    location.reload();
+});
+
 if (mobileControls) mobileControls.style.display = "flex";
 if (joystick) joystick.style.display = "none";
 if (attackBtn) attackBtn.style.display = "none";
@@ -106,12 +116,14 @@ function showGameControls() {
   if (joystick) joystick.style.display = "block";
   if (attackBtn) attackBtn.style.display = "block";
   if (restartBtn) restartBtn.style.display = "none";
+  if (fullscreenBtn) fullscreenBtn.style.display = "none";
 }
 
 function showGameOverControls() {
   if (joystick) joystick.style.display = "none";
   if (attackBtn) attackBtn.style.display = "none";
   if (restartBtn) restartBtn.style.display = "block";
+  if (fullscreenBtn) fullscreenBtn.style.display = "none";
 }
 
 function hideAllControls() {
@@ -259,8 +271,8 @@ function keepInsideIsland(obj) {
 }
 
 function updateDifficulty() {
-  maxEnemies = 1 + Math.floor(score / 300);
-  maxEnemies = Math.min(maxEnemies, 5);
+  maxEnemies = 1 + Math.floor(score / 120);
+  maxEnemies = Math.min(maxEnemies, 8);
 
   while (enemies.length < maxEnemies) {
     spawnEnemy();
@@ -321,7 +333,7 @@ function restartGame() {
 
 function spawnEnemy() {
   const zone = enemySpawnZones[Math.floor(Math.random() * enemySpawnZones.length)];
-  const enemySpeed = 1.2 + Math.min(score / 1000, 1.1);
+  const enemySpeed = 2.3 + Math.min(score / 500, 2.5);
 
   enemies.push({
     x: zone.x + Math.random() * 120 - 60,
@@ -997,8 +1009,8 @@ function drawBoss() {
 
   ctx.drawImage(
     bossImage,
-    boss.x - boss.size / 2,
-    boss.y - boss.size / 2,
+    boss.x - boss.size / 1,
+    boss.y - boss.size / 1.2,
     boss.size,
     boss.size
   );
@@ -1242,12 +1254,19 @@ function drawGameOver() {
 
   ctx.fillStyle = "white";
   ctx.font = "60px Arial";
-  ctx.fillText("GAME OVER", canvas.width / 2 - 180, canvas.height / 2 - 100);
+  ctx.fillText("GAME OVER", canvas.width / 2 - 180, canvas.height / 2 - 40);
 
   ctx.font = "30px Arial";
-  ctx.fillText("Final Score: " + score, canvas.width / 2 - 100, canvas.height / 2 - 30);
-  ctx.fillText("High Score: " + highScore, canvas.width / 2 - 100, canvas.height / 2 + 10);
+  ctx.fillText("Final Score: " + score, canvas.width / 2 - 100, canvas.height / 2 + 40);
+  ctx.fillText("High Score: " + highScore, canvas.width / 2 - 100, canvas.height / 2 + 90);
 
+  ctx.fillStyle = "#ffd700";
+ctx.font = "24px Arial";
+ctx.fillText("Tap RESTART button to play again", canvas.width / 2 - 170, canvas.height / 2 + 140);
+
+  ctx.font = "24px Arial";
+  ctx.fillStyle = "#ffd700";
+  
   showGameOverControls();
 }
 
@@ -1261,11 +1280,11 @@ function gameLoop() {
   ctx.translate(shakeX, shakeY);
 
   if (!gameStarted) {
-    drawStartScreen();
-    ctx.restore();
-    requestAnimationFrame(gameLoop);
-    return;
-  }
+  drawStartScreen();
+  ctx.restore();
+  requestAnimationFrame(gameLoop);
+  return;
+}
 
   if (!gameOver) {
     if (score >= nextBossScore && !boss) {
@@ -1310,16 +1329,17 @@ function gameLoop() {
     drawChestEffects();
 
     if (player.hp <= 0) {
-      const runTime = Math.floor((Date.now() - gameStartTime) / 1000);
 
-      if (runTime > longestRun) {
-        longestRun = runTime;
-        localStorage.setItem("longestRun", longestRun);
-      }
+  const runTime = Math.floor((Date.now() - gameStartTime) / 1000);
 
-      gameOver = true;
-      showGameOverControls();
-    }
+  if (runTime > longestRun) {
+    longestRun = runTime;
+    localStorage.setItem("longestRun", longestRun);
+  }
+
+  gameOver = true;
+  showGameOverControls();
+}
 
     if (screenShake > 0) screenShake *= 0.85;
 
@@ -1329,14 +1349,15 @@ function gameLoop() {
     checkAchievements();
     drawAchievementPopups();
 
+    requestAnimationFrame(gameLoop);
   } else {
     drawMap();
-    ctx.restore();
-    drawGameOver();
-  }
-
-  requestAnimationFrame(gameLoop);
+    ctx.restore(); {
+  drawGameOver();
 }
+}
+    requestAnimationFrame(gameLoop);
+  }
 
 spawnEnemy();
 spawnGem();
