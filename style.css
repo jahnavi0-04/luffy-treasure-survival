@@ -65,7 +65,7 @@ canvas {
 #restartBtn {
   position: fixed;
   left: 50%;
-  top: 76%;
+  top: 68%;
   transform: translateX(-50%);
   width: 220px;
   height: 70px;
