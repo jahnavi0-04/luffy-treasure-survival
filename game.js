@@ -1,24 +1,16 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-window.addEventListener("load", () => {
-    gameLoop();
-});
-
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
 
 const mobileControls = document.getElementById("mobileControls");
 const joystick = document.getElementById("joystick");
 const stick = document.getElementById("stick");
 const attackBtn = document.getElementById("attackBtn");
 const restartBtn = document.getElementById("restartBtn");
-const statsBtn = document.getElementById("statsBtn");
-if (statsBtn) statsBtn.style.display = "none";
+const fullscreenBtn = document.getElementById("fullscreenBtn");
+if (fullscreenBtn) fullscreenBtn.style.display = "block";
 if (mobileControls) mobileControls.style.display = "flex";
 if (joystick) joystick.style.display = "none";
 if (attackBtn) attackBtn.style.display = "none";
@@ -101,7 +93,6 @@ let bossesDefeated = 0;
 let mapsCollected = 0;
 let gameStartTime = 0;
 let longestRun = localStorage.getItem("longestRun") || 0;
-let showStats = false;
 
 const unlockedAchievements = [];
 const achievementPopups = [];
@@ -117,21 +108,20 @@ function showGameControls() {
   if (joystick) joystick.style.display = "block";
   if (attackBtn) attackBtn.style.display = "block";
   if (restartBtn) restartBtn.style.display = "none";
-  if (statsBtn) statsBtn.style.display = "none";
+  if (fullscreenBtn) fullscreenBtn.style.display = "none";
 }
 
 function showGameOverControls() {
   if (joystick) joystick.style.display = "none";
   if (attackBtn) attackBtn.style.display = "none";
   if (restartBtn) restartBtn.style.display = "block";
-  if (statsBtn) statsBtn.style.display = "block";
+  if (fullscreenBtn) fullscreenBtn.style.display = "none";
 }
 
 function hideAllControls() {
   if (joystick) joystick.style.display = "none";
   if (attackBtn) attackBtn.style.display = "none";
   if (restartBtn) restartBtn.style.display = "none";
-  if (statsBtn) statsBtn.style.display = "none";
 }
 
 async function startGame() {
@@ -179,32 +169,6 @@ if (restartBtn) {
   });
 }
 
-if (statsBtn) {
-  function toggleStats(e) {
-  e.preventDefault();
-  e.stopPropagation();
-
-  if (gameOver) {
-    showStats = !showStats;
-
-    if (showStats) {
-      if (restartBtn) restartBtn.style.display = "none";
-      if (statsBtn) statsBtn.style.display = "none";
-    } else {
-      showGameOverControls();
-    }
-  }
-};
-}
-
-window.addEventListener("touchstart", (e) => {
-  if (gameOver && showStats) {
-    e.preventDefault();
-    showStats = false;
-    showGameOverControls();
-  }
-});
-
 function playAttackSound() {
   const sound = new Audio("assets/sounds/attack.mp3");
   sound.volume = 0.35;
@@ -232,10 +196,6 @@ window.addEventListener("keydown", (e) => {
   if (e.code === "Space") startAttack();
   if (e.key === "Enter") startGame();
 
-  if (e.key.toLowerCase() === "t" && gameOver) {
-    showStats = !showStats;
-  }
-
   if (e.key.toLowerCase() === "r" && gameOver) {
     restartGame();
     gameStarted = true;
@@ -261,15 +221,27 @@ if (attackBtn) {
   });
 }
 
-canvas.addEventListener("click", () => {
-  if (showStats) {
-    showStats = false;
+if (fullscreenBtn) {
+  fullscreenBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
 
-    restartBtn.style.display = "block";
-    statsBtn.style.display = "block";
-  }
-});
+    try {
+      if (document.documentElement.requestFullscreen) {
+        await document.documentElement.requestFullscreen();
+      }
 
+      if (screen.orientation && screen.orientation.lock) {
+        await screen.orientation.lock("landscape");
+      }
+    } catch (err) {
+      console.log("Fullscreen/landscape not supported:", err);
+    }
+
+    fullscreenBtn.style.display = "none";
+    startGame();
+  });
+}
 
 if (joystick && stick) {
   joystick.addEventListener("touchmove", (e) => {
@@ -313,8 +285,8 @@ function keepInsideIsland(obj) {
 }
 
 function updateDifficulty() {
-  maxEnemies = 2 + Math.floor(score / 250);
-  maxEnemies = Math.min(maxEnemies, 7);
+  maxEnemies = 1 + Math.floor(score / 120);
+  maxEnemies = Math.min(maxEnemies, 8);
 
   while (enemies.length < maxEnemies) {
     spawnEnemy();
@@ -347,7 +319,6 @@ function restartGame() {
   touchMoveY = 0;
 
   mapsCollected = 0;
-  showStats = false;
   gameStartTime = Date.now();
 
   chestsOpened = 0;
@@ -376,7 +347,7 @@ function restartGame() {
 
 function spawnEnemy() {
   const zone = enemySpawnZones[Math.floor(Math.random() * enemySpawnZones.length)];
-  const enemySpeed = 1.4 + Math.min(score / 900, 1.4);
+  const enemySpeed = 2.3 + Math.min(score / 500, 2.5);
 
   enemies.push({
     x: zone.x + Math.random() * 120 - 60,
@@ -392,7 +363,7 @@ function spawnBoss() {
   boss = {
     x: 250,
     y: 180,
-    size: 140,
+    size: 240,
     speed: 1.4 + bossLevel * 0.05,
     hp: bossHp,
     maxHp: bossHp,
@@ -851,7 +822,7 @@ function moveEnemies() {
 
     keepInsideIsland(enemy);
 
-    if (distance < player.size) player.hp -= 0.12;
+    if (distance < player.size) player.hp -= 0.2;
 
     if (attacking && distance < attackRadius) {
       enemies.splice(index, 1);
@@ -877,7 +848,7 @@ function moveBoss() {
   boss.x = Math.max(island.x + boss.size / 2, Math.min(island.x + island.width - boss.size / 2, boss.x));
   boss.y = Math.max(island.y + boss.size / 2, Math.min(island.y + island.height - boss.size / 2, boss.y));
 
-  if (distance < boss.size / 2) player.hp -= 0.15;
+  if (distance < boss.size / 2) player.hp -= 0.25;
 
   if (attacking && distance < attackRadius + 60) {
     boss.hp -= 6;
@@ -1249,21 +1220,9 @@ function drawChestEffects() {
 
 function drawAchievementPopups() {
   achievementPopups.forEach((popup, index) => {
-    const boxWidth = 360;
-    const boxHeight = 50;
-    const x = canvas.width / 2 - boxWidth / 2;
-    const y = 45;
-
-    ctx.fillStyle = "rgba(0,0,0,0.65)";
-    ctx.fillRect(x, y, boxWidth, boxHeight);
-
-    ctx.strokeStyle = "#ffd700";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(x, y, boxWidth, boxHeight);
-
     ctx.fillStyle = "#ffd700";
-    ctx.font = "26px Arial";
-    ctx.fillText(popup.text, x + 45, y + 34);
+    ctx.font = "32px Arial";
+    ctx.fillText(popup.text, canvas.width / 2 - 120, 120);
 
     popup.life--;
 
@@ -1273,38 +1232,13 @@ function drawAchievementPopups() {
   });
 }
 
-function drawStatsScreen() {
-  ctx.fillStyle = "rgba(0,0,0,0.88)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+function drawFullscreenPrompt() {
+  ctx.fillStyle = "rgba(0,0,0,0.65)";
+  ctx.fillRect(canvas.width / 2 - 160, canvas.height - 95, 320, 60);
 
   ctx.fillStyle = "#ffd700";
-  ctx.font = "38px Arial";
-  ctx.fillText("📊 Statistics", canvas.width / 2 - 120, 70);
-
-  ctx.fillStyle = "rgba(0,0,0,0.55)";
-  ctx.fillRect(55, 95, canvas.width - 110, 320);
-
-  ctx.strokeStyle = "#ffd700";
-  ctx.lineWidth = 3;
-  ctx.strokeRect(55, 95, canvas.width - 110, 320);
-
-  ctx.fillStyle = "white";
-  ctx.font = "24px Arial";
-
-  ctx.fillText("🏆 High Score: " + highScore, 80, 135);
-  ctx.fillText("🗺️ Maps Collected: " + mapsCollected, 80, 175);
-  ctx.fillText("💰 Chests Opened: " + chestsOpened, 80, 215);
-  ctx.fillText("🍖 Meat Collected: " + meatCollected, 80, 255);
-  ctx.fillText("👑 Bosses Defeated: " + bossesDefeated, 80, 295);
-  ctx.fillText("⏱️ Longest Run: " + longestRun + "s", 80, 335);
-
-  ctx.fillStyle = "#ffd700";
-ctx.font = "22px Arial";
-ctx.fillText(
-  "Tap anywhere to close",
-  canvas.width / 2 - 90,
-  canvas.height - 40
-);
+  ctx.font = "28px Arial";
+  ctx.fillText("FULLSCREEN", canvas.width / 2 - 85, canvas.height - 55);
 }
 
 function drawUI() {
@@ -1342,14 +1276,15 @@ function drawGameOver() {
 
   ctx.fillStyle = "white";
   ctx.font = "60px Arial";
-  ctx.fillText("GAME OVER", canvas.width / 2 - 180, canvas.height / 2 - 120);
+  ctx.fillText("GAME OVER", canvas.width / 2 - 180, canvas.height / 2);
 
   ctx.font = "30px Arial";
-  ctx.fillText("Final Score: " + score, canvas.width / 2 - 100, canvas.height / 2 - 50);
-  ctx.fillText("High Score: " + highScore, canvas.width / 2 - 100, canvas.height / 2 - 10);
+  ctx.fillText("Final Score: " + score, canvas.width / 2 - 100, canvas.height / 2 + 50);
+  ctx.fillText("High Score: " + highScore, canvas.width / 2 - 100, canvas.height / 2 + 90);
 
   ctx.fillStyle = "#ffd700";
-  ctx.font = "24px Arial";
+ctx.font = "24px Arial";
+ctx.fillText("Tap RESTART button to play again", canvas.width / 2 - 170, canvas.height / 2 + 140);
 
   ctx.font = "24px Arial";
   ctx.fillStyle = "#ffd700";
@@ -1368,6 +1303,7 @@ function gameLoop() {
 
   if (!gameStarted) {
   drawStartScreen();
+  drawFullscreenPrompt();
   ctx.restore();
   requestAnimationFrame(gameLoop);
   return;
@@ -1439,21 +1375,15 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
   } else {
     drawMap();
-    ctx.restore();
-    if (showStats) {
-  drawStatsScreen();
-} else {
-  if (showStats) {
-  drawStatsScreen();
-} else {
+    ctx.restore(); {
   drawGameOver();
 }
 }
     requestAnimationFrame(gameLoop);
   }
-}
 
 spawnEnemy();
 spawnGem();
 spawnMeat();
 spawnChest();
+gameLoop();
