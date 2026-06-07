@@ -9,8 +9,6 @@ const joystick = document.getElementById("joystick");
 const stick = document.getElementById("stick");
 const attackBtn = document.getElementById("attackBtn");
 const restartBtn = document.getElementById("restartBtn");
-const fullscreenBtn = document.getElementById("fullscreenBtn");
-if (fullscreenBtn) fullscreenBtn.style.display = "block";
 if (mobileControls) mobileControls.style.display = "flex";
 if (joystick) joystick.style.display = "none";
 if (attackBtn) attackBtn.style.display = "none";
@@ -108,14 +106,12 @@ function showGameControls() {
   if (joystick) joystick.style.display = "block";
   if (attackBtn) attackBtn.style.display = "block";
   if (restartBtn) restartBtn.style.display = "none";
-  if (fullscreenBtn) fullscreenBtn.style.display = "none";
 }
 
 function showGameOverControls() {
   if (joystick) joystick.style.display = "none";
   if (attackBtn) attackBtn.style.display = "none";
   if (restartBtn) restartBtn.style.display = "block";
-  if (fullscreenBtn) fullscreenBtn.style.display = "none";
 }
 
 function hideAllControls() {
@@ -221,28 +217,6 @@ if (attackBtn) {
   });
 }
 
-if (fullscreenBtn) {
-  fullscreenBtn.addEventListener("click", async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    try {
-      if (document.documentElement.requestFullscreen) {
-        await document.documentElement.requestFullscreen();
-      }
-
-      if (screen.orientation && screen.orientation.lock) {
-        await screen.orientation.lock("landscape");
-      }
-    } catch (err) {
-      console.log("Fullscreen/landscape not supported:", err);
-    }
-
-    fullscreenBtn.style.display = "none";
-    startGame();
-  });
-}
-
 if (joystick && stick) {
   joystick.addEventListener("touchmove", (e) => {
     e.preventDefault();
@@ -285,8 +259,8 @@ function keepInsideIsland(obj) {
 }
 
 function updateDifficulty() {
-  maxEnemies = 1 + Math.floor(score / 120);
-  maxEnemies = Math.min(maxEnemies, 8);
+  maxEnemies = 1 + Math.floor(score / 300);
+  maxEnemies = Math.min(maxEnemies, 5);
 
   while (enemies.length < maxEnemies) {
     spawnEnemy();
@@ -347,7 +321,7 @@ function restartGame() {
 
 function spawnEnemy() {
   const zone = enemySpawnZones[Math.floor(Math.random() * enemySpawnZones.length)];
-  const enemySpeed = 2.3 + Math.min(score / 500, 2.5);
+  const enemySpeed = 1.2 + Math.min(score / 1000, 1.1);
 
   enemies.push({
     x: zone.x + Math.random() * 120 - 60,
@@ -1232,14 +1206,6 @@ function drawAchievementPopups() {
   });
 }
 
-function drawFullscreenPrompt() {
-  ctx.fillStyle = "rgba(0,0,0,0.65)";
-  ctx.fillRect(canvas.width / 2 - 160, canvas.height - 95, 320, 60);
-
-  ctx.fillStyle = "#ffd700";
-  ctx.font = "28px Arial";
-  ctx.fillText("FULLSCREEN", canvas.width / 2 - 85, canvas.height - 55);
-}
 
 function drawUI() {
   // Background panel
@@ -1276,19 +1242,12 @@ function drawGameOver() {
 
   ctx.fillStyle = "white";
   ctx.font = "60px Arial";
-  ctx.fillText("GAME OVER", canvas.width / 2 - 180, canvas.height / 2);
+  ctx.fillText("GAME OVER", canvas.width / 2 - 180, canvas.height / 2 - 100);
 
   ctx.font = "30px Arial";
-  ctx.fillText("Final Score: " + score, canvas.width / 2 - 100, canvas.height / 2 + 50);
-  ctx.fillText("High Score: " + highScore, canvas.width / 2 - 100, canvas.height / 2 + 90);
+  ctx.fillText("Final Score: " + score, canvas.width / 2 - 100, canvas.height / 2 - 30);
+  ctx.fillText("High Score: " + highScore, canvas.width / 2 - 100, canvas.height / 2 + 10);
 
-  ctx.fillStyle = "#ffd700";
-ctx.font = "24px Arial";
-ctx.fillText("Tap RESTART button to play again", canvas.width / 2 - 170, canvas.height / 2 + 140);
-
-  ctx.font = "24px Arial";
-  ctx.fillStyle = "#ffd700";
-  
   showGameOverControls();
 }
 
@@ -1303,7 +1262,6 @@ function gameLoop() {
 
   if (!gameStarted) {
   drawStartScreen();
-  drawFullscreenPrompt();
   ctx.restore();
   requestAnimationFrame(gameLoop);
   return;
@@ -1373,14 +1331,14 @@ function gameLoop() {
     drawAchievementPopups();
 
     requestAnimationFrame(gameLoop);
-  } else {
+    } else {
     drawMap();
-    ctx.restore(); {
-  drawGameOver();
-}
-}
+    ctx.restore();
+    drawGameOver();
     requestAnimationFrame(gameLoop);
   }
+}
+    requestAnimationFrame(gameLoop);
 
 spawnEnemy();
 spawnGem();
