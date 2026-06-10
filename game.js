@@ -113,14 +113,12 @@ function showGameControls() {
   if (joystick) joystick.style.display = "block";
   if (attackBtn) attackBtn.style.display = "block";
   if (restartBtn) restartBtn.style.display = "none";
-  if (fullscreenBtn) fullscreenBtn.style.display = "none";
 }
 
 function showGameOverControls() {
   if (joystick) joystick.style.display = "none";
   if (attackBtn) attackBtn.style.display = "none";
   if (restartBtn) restartBtn.style.display = "block";
-  if (fullscreenBtn) fullscreenBtn.style.display = "none";
 }
 
 function hideAllControls() {
@@ -345,7 +343,7 @@ function spawnBoss() {
   boss = {
     x: 250,
     y: 180,
-    size: 140,
+    size: 110,
     speed: 1.4 + bossLevel * 0.05,
     hp: bossHp,
     maxHp: bossHp,
