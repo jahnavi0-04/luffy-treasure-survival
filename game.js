@@ -2,8 +2,13 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  island.x = 40;
+  island.y = 40;
+  island.width = canvas.width - 80;
+  island.height = canvas.height - 80;
 }
 
 window.addEventListener("resize", resizeCanvas);
@@ -14,7 +19,6 @@ const joystick = document.getElementById("joystick");
 const stick = document.getElementById("stick");
 const attackBtn = document.getElementById("attackBtn");
 const restartBtn = document.getElementById("restartBtn");
-
 
 if (mobileControls) mobileControls.style.display = "flex";
 if (joystick) joystick.style.display = "none";
@@ -103,10 +107,10 @@ const unlockedAchievements = [];
 const achievementPopups = [];
 
 const island = {
-  x: 0,
-  y: 0,
-  width: canvas.width,
-  height: canvas.height
+  x: 40,
+  y: 40,
+  width: canvas.width - 80,
+  height: canvas.height - 80
 };
 
 function showGameControls() {
@@ -127,19 +131,8 @@ function hideAllControls() {
   if (restartBtn) restartBtn.style.display = "none";
 }
 
-async function startGame() {
+function startGame() {
   if (!gameStarted && !gameOver) {
-    try {
-      if (document.documentElement.requestFullscreen) {
-        await document.documentElement.requestFullscreen();
-      }
-
-      if (screen.orientation && screen.orientation.lock) {
-        await screen.orientation.lock("landscape");
-      }
-    } catch (err) {
-      console.log("Fullscreen not supported:", err);
-    }
 
     bgm.play().catch(() => {});
 
@@ -167,6 +160,7 @@ if (restartBtn) {
     gameOver = false;
 
     bgm.play().catch(() => {});
+
     showGameControls();
   });
 }
@@ -260,13 +254,13 @@ if (joystick && stick) {
 }
 
 function keepInsideIsland(obj) {
-  obj.x = Math.max(0, Math.min(canvas.width - obj.size, obj.x));
-  obj.y = Math.max(0, Math.min(canvas.height - obj.size, obj.y));
+  obj.x = Math.max(island.x, Math.min(island.x + island.width - obj.size, obj.x));
+  obj.y = Math.max(island.y, Math.min(island.y + island.height - obj.size, obj.y));
 }
 
 function updateDifficulty() {
-  maxEnemies = 1 + Math.floor(score / 350);
-  maxEnemies = Math.min(maxEnemies, 5);
+  maxEnemies = 1 + Math.floor(score / 500);
+  maxEnemies = Math.min(maxEnemies, 4);
 
   while (enemies.length < maxEnemies) {
     spawnEnemy();
@@ -327,7 +321,7 @@ function restartGame() {
 
 function spawnEnemy() {
   const zone = enemySpawnZones[Math.floor(Math.random() * enemySpawnZones.length)];
-  const enemySpeed = 1.2 + Math.min(score / 1000, 1.1);
+  const enemySpeed = 1.0 + Math.min(score / 1500, 0.8);
 
   enemies.push({
     x: zone.x + Math.random() * 120 - 60,
@@ -343,7 +337,7 @@ function spawnBoss() {
   boss = {
     x: 250,
     y: 180,
-    size: 110,
+    size: 120,
     speed: 1.4 + bossLevel * 0.05,
     hp: bossHp,
     maxHp: bossHp,
@@ -735,7 +729,7 @@ function updateShockwaves() {
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (!wave.alreadyHit && distance < wave.radius && distance > wave.radius - 18) {
-      player.hp -= 4;
+      player.hp -= 2;
       wave.alreadyHit = true;
       screenShake = 10;
     }
@@ -776,7 +770,7 @@ function bossChargeAttack() {
     const playerDistance = Math.sqrt(pdx * pdx + pdy * pdy);
 
     if (playerDistance < boss.size / 2) {
-      player.hp -= 12;
+      player.hp -= 6;
       screenShake = 20;
       boss.charging = false;
       boss.chargeCooldown = 420;
@@ -1003,8 +997,8 @@ function drawBoss() {
 
   ctx.drawImage(
     bossImage,
-    boss.x - boss.size / 1,
-    boss.y - boss.size / 1.2,
+    boss.x - boss.size / 2,
+    boss.y - boss.size / 2,
     boss.size,
     boss.size
   );
@@ -1212,7 +1206,6 @@ function drawAchievementPopups() {
   });
 }
 
-
 function drawUI() {
   // Background panel
   ctx.fillStyle = "rgba(0,0,0,0.45)";
@@ -1248,11 +1241,11 @@ function drawGameOver() {
 
   ctx.fillStyle = "white";
   ctx.font = "60px Arial";
-  ctx.fillText("GAME OVER", canvas.width / 2 - 180, canvas.height / 2 - 90);
+  ctx.fillText("GAME OVER", canvas.width / 2 - 180, canvas.height / 2 - 80);
 
   ctx.font = "30px Arial";
-  ctx.fillText("Final Score: " + score, canvas.width / 2 - 120, canvas.height / 2 - 20);
-  ctx.fillText("High Score: " + highScore, canvas.width / 2 - 120, canvas.height / 2 + 30);
+  ctx.fillText("Final Score: " + score, canvas.width / 2 - 120, canvas.height / 2 - 10);
+  ctx.fillText("High Score: " + highScore, canvas.width / 2 - 120, canvas.height / 2 + 40);
 
   showGameOverControls();
 }
@@ -1267,11 +1260,11 @@ function gameLoop() {
   ctx.translate(shakeX, shakeY);
 
   if (!gameStarted) {
-  drawStartScreen();
-  ctx.restore();
-  requestAnimationFrame(gameLoop);
-  return;
-}
+    drawStartScreen();
+    ctx.restore();
+    requestAnimationFrame(gameLoop);
+    return;
+  }
 
   if (!gameOver) {
     if (score >= nextBossScore && !boss) {
@@ -1339,12 +1332,11 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
   } else {
     drawMap();
-    ctx.restore(); {
-  drawGameOver();
-}
-}
+    ctx.restore();
+    drawGameOver();
     requestAnimationFrame(gameLoop);
   }
+}
 
 spawnEnemy();
 spawnGem();
