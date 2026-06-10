@@ -1,18 +1,8 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-
-  island.x = 40;
-  island.y = 40;
-  island.width = canvas.width - 80;
-  island.height = canvas.height - 80;
-}
-
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 const mobileControls = document.getElementById("mobileControls");
 const joystick = document.getElementById("joystick");
@@ -107,10 +97,10 @@ const unlockedAchievements = [];
 const achievementPopups = [];
 
 const island = {
-  x: 40,
-  y: 40,
-  width: canvas.width - 80,
-  height: canvas.height - 80
+  x: 120,
+  y: 80,
+  width: canvas.width - 240,
+  height: canvas.height - 160
 };
 
 function showGameControls() {
@@ -321,7 +311,7 @@ function restartGame() {
 
 function spawnEnemy() {
   const zone = enemySpawnZones[Math.floor(Math.random() * enemySpawnZones.length)];
-  const enemySpeed = 1.0 + Math.min(score / 1500, 0.8);
+  const enemySpeed = 1.2 + Math.min(score / 1000, 1.1);
 
   enemies.push({
     x: zone.x + Math.random() * 120 - 60,
