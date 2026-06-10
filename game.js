@@ -38,8 +38,7 @@ const bossSpawnSound = new Audio("assets/sounds/boss_spawn.mp3"); bossSpawnSound
 const bossDefeatSound = new Audio("assets/sounds/boss_defeat.mp3"); bossDefeatSound.volume = 0.85;;
 const bgm = new Audio("assets/sounds/bgm.mp3"); bgm.loop = true; bgm.volume = 0.25;
 
-const player = { x: canvas.width * 0.8, y: canvas.height * 0.75, size: 110, speed: 5, hp: 100 };
-
+const player = { x: canvas.width * 0.7, y: canvas.height * 0.55, size: 110, speed: 5, hp: 100};
 const zoro = { x: 120, y: 220, size: 100, speed: 3.5, attackRadius: 120, attackCooldown: 0 };
 const sanji = { x: 280, y: 220, size: 92, speed: 4, attackRadius: 105, attackCooldown: 0 };
 const chopper = { x: 200, y: 310, size: 75, speed: 3.2, healCooldown: 0 };
@@ -97,10 +96,10 @@ const unlockedAchievements = [];
 const achievementPopups = [];
 
 const island = {
-  x: 120,
-  y: 80,
-  width: canvas.width - 240,
-  height: canvas.height - 160
+  x: 40,
+  y: 40,
+  width: canvas.width - 80,
+  height: canvas.height - 80
 };
 
 function showGameControls() {
@@ -260,8 +259,8 @@ function updateDifficulty() {
 function restartGame() {
   hideAllControls();
 
-  player.x = canvas.width * 0.8;
-  player.y = canvas.height * 0.75;
+  player.x = canvas.width * 0.7;
+player.y = canvas.height * 0.55;
   player.hp = 100;
 
   zoro.x = 120; zoro.y = 220; zoro.attackCooldown = 0;
@@ -1186,7 +1185,7 @@ function drawAchievementPopups() {
   achievementPopups.forEach((popup, index) => {
     ctx.fillStyle = "#ffd700";
     ctx.font = "32px Arial";
-    ctx.fillText(popup.text, canvas.width / 2 - 120, 120);
+    ctx.fillText(popup.text, canvas.width / 2 - 120, 35);
 
     popup.life--;
 
