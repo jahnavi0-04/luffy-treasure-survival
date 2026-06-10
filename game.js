@@ -15,9 +15,6 @@ const stick = document.getElementById("stick");
 const attackBtn = document.getElementById("attackBtn");
 const restartBtn = document.getElementById("restartBtn");
 
-restartBtn.addEventListener("click", () => {
-    location.reload();
-});
 
 if (mobileControls) mobileControls.style.display = "flex";
 if (joystick) joystick.style.display = "none";
@@ -172,7 +169,6 @@ if (restartBtn) {
     gameOver = false;
 
     bgm.play().catch(() => {});
-
     showGameControls();
   });
 }
@@ -271,8 +267,8 @@ function keepInsideIsland(obj) {
 }
 
 function updateDifficulty() {
-  maxEnemies = 1 + Math.floor(score / 120);
-  maxEnemies = Math.min(maxEnemies, 8);
+  maxEnemies = 1 + Math.floor(score / 350);
+  maxEnemies = Math.min(maxEnemies, 5);
 
   while (enemies.length < maxEnemies) {
     spawnEnemy();
@@ -333,7 +329,7 @@ function restartGame() {
 
 function spawnEnemy() {
   const zone = enemySpawnZones[Math.floor(Math.random() * enemySpawnZones.length)];
-  const enemySpeed = 2.3 + Math.min(score / 500, 2.5);
+  const enemySpeed = 1.2 + Math.min(score / 1000, 1.1);
 
   enemies.push({
     x: zone.x + Math.random() * 120 - 60,
@@ -349,7 +345,7 @@ function spawnBoss() {
   boss = {
     x: 250,
     y: 180,
-    size: 240,
+    size: 140,
     speed: 1.4 + bossLevel * 0.05,
     hp: bossHp,
     maxHp: bossHp,
@@ -808,7 +804,7 @@ function moveEnemies() {
 
     keepInsideIsland(enemy);
 
-    if (distance < player.size) player.hp -= 0.2;
+    if (distance < player.size) player.hp -= 0.06;
 
     if (attacking && distance < attackRadius) {
       enemies.splice(index, 1);
@@ -834,7 +830,7 @@ function moveBoss() {
   boss.x = Math.max(island.x + boss.size / 2, Math.min(island.x + island.width - boss.size / 2, boss.x));
   boss.y = Math.max(island.y + boss.size / 2, Math.min(island.y + island.height - boss.size / 2, boss.y));
 
-  if (distance < boss.size / 2) player.hp -= 0.25;
+  if (distance < boss.size / 2) player.hp -= 0.05;
 
   if (attacking && distance < attackRadius + 60) {
     boss.hp -= 6;
@@ -1254,19 +1250,12 @@ function drawGameOver() {
 
   ctx.fillStyle = "white";
   ctx.font = "60px Arial";
-  ctx.fillText("GAME OVER", canvas.width / 2 - 180, canvas.height / 2 - 40);
+  ctx.fillText("GAME OVER", canvas.width / 2 - 180, canvas.height / 2 - 90);
 
   ctx.font = "30px Arial";
-  ctx.fillText("Final Score: " + score, canvas.width / 2 - 100, canvas.height / 2 + 40);
-  ctx.fillText("High Score: " + highScore, canvas.width / 2 - 100, canvas.height / 2 + 90);
+  ctx.fillText("Final Score: " + score, canvas.width / 2 - 120, canvas.height / 2 - 20);
+  ctx.fillText("High Score: " + highScore, canvas.width / 2 - 120, canvas.height / 2 + 30);
 
-  ctx.fillStyle = "#ffd700";
-ctx.font = "24px Arial";
-ctx.fillText("Tap RESTART button to play again", canvas.width / 2 - 170, canvas.height / 2 + 140);
-
-  ctx.font = "24px Arial";
-  ctx.fillStyle = "#ffd700";
-  
   showGameOverControls();
 }
 
