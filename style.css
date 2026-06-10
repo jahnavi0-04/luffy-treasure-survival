@@ -20,8 +20,6 @@ canvas {
   justify-content: space-between;
   align-items: center;
   pointer-events: none;
-  touch-action: none;
-  user-select: none;
 }
 
 #joystick {
@@ -32,8 +30,6 @@ canvas {
   background: rgba(255,255,255,0.25);
   position: relative;
   pointer-events: auto;
-  touch-action: none;
-  user-select: none;
 }
 
 #stick {
@@ -44,8 +40,6 @@ canvas {
   position: absolute;
   left: 32px;
   top: 32px;
-  touch-action: none;
-  user-select: none;
 }
 
 #attackBtn {
@@ -59,7 +53,6 @@ canvas {
   font-size: 18px;
   font-weight: bold;
   pointer-events: auto;
-  touch-action: manipulation;
 }
 
 #restartBtn {
@@ -77,4 +70,5 @@ canvas {
   font-weight: bold;
   display: none;
   z-index: 2000;
+  pointer-events: auto;
 }
