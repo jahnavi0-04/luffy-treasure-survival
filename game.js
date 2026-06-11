@@ -1,8 +1,14 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resizeGame() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight - 80;
+}
+
+resizeGame();
+
+window.addEventListener("resize", resizeGame);
 
 const mobileControls = document.getElementById("mobileControls");
 const joystick = document.getElementById("joystick");
@@ -38,7 +44,7 @@ const bossSpawnSound = new Audio("assets/sounds/boss_spawn.mp3"); bossSpawnSound
 const bossDefeatSound = new Audio("assets/sounds/boss_defeat.mp3"); bossDefeatSound.volume = 0.85;;
 const bgm = new Audio("assets/sounds/bgm.mp3"); bgm.loop = true; bgm.volume = 0.25;
 
-const player = { x: canvas.width * 0.7, y: canvas.height * 0.55, size: 110, speed: 5, hp: 100};
+const player = { x: canvas.width * 0.7, y: canvas.height * 0.45, size: 110, speed: 5, hp: 100 };
 const zoro = { x: 120, y: 220, size: 100, speed: 3.5, attackRadius: 120, attackCooldown: 0 };
 const sanji = { x: 280, y: 220, size: 92, speed: 4, attackRadius: 105, attackCooldown: 0 };
 const chopper = { x: 200, y: 310, size: 75, speed: 3.2, healCooldown: 0 };
@@ -96,10 +102,10 @@ const unlockedAchievements = [];
 const achievementPopups = [];
 
 const island = {
-  x: 40,
-  y: 40,
-  width: canvas.width - 80,
-  height: canvas.height - 80
+  x: 0,
+  y: 0,
+  width: canvas.width,
+  height: canvas.height
 };
 
 function showGameControls() {
@@ -243,8 +249,8 @@ if (joystick && stick) {
 }
 
 function keepInsideIsland(obj) {
-  obj.x = Math.max(island.x, Math.min(island.x + island.width - obj.size, obj.x));
-  obj.y = Math.max(island.y, Math.min(island.y + island.height - obj.size, obj.y));
+  obj.x = Math.max(0, Math.min(canvas.width - obj.size, obj.x));
+  obj.y = Math.max(0, Math.min(canvas.height - obj.size, obj.y));
 }
 
 function updateDifficulty() {
@@ -260,7 +266,7 @@ function restartGame() {
   hideAllControls();
 
   player.x = canvas.width * 0.7;
-player.y = canvas.height * 0.55;
+  player.y = canvas.height * 0.45;
   player.hp = 100;
 
   zoro.x = 120; zoro.y = 220; zoro.attackCooldown = 0;
