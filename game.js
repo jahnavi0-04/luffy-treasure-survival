@@ -1,12 +1,8 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-function resizeGame() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight - 80;
-}
-
-resizeGame();
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
 window.addEventListener("resize", resizeGame);
 
