@@ -4,8 +4,6 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-window.addEventListener("resize", resizeGame);
-
 const mobileControls = document.getElementById("mobileControls");
 const joystick = document.getElementById("joystick");
 const stick = document.getElementById("stick");
