@@ -1,8 +1,20 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  setTimeout(() => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }, 300);
+}
+
+resizeCanvas();
+
+window.addEventListener("resize", resizeCanvas);
+window.addEventListener("orientationchange", resizeCanvas);
 
 const mobileControls = document.getElementById("mobileControls");
 const joystick = document.getElementById("joystick");
