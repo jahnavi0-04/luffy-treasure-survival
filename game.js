@@ -254,8 +254,8 @@ function keepInsideIsland(obj) {
 }
 
 function updateDifficulty() {
-  maxEnemies = 1 + Math.floor(score / 500);
-  maxEnemies = Math.min(maxEnemies, 4);
+  maxEnemies = 1 + Math.floor(score / 350);
+  maxEnemies = Math.min(maxEnemies, 5);
 
   while (enemies.length < maxEnemies) {
     spawnEnemy();
@@ -316,7 +316,7 @@ function restartGame() {
 
 function spawnEnemy() {
   const zone = enemySpawnZones[Math.floor(Math.random() * enemySpawnZones.length)];
-  const enemySpeed = 1.2 + Math.min(score / 1000, 1.1);
+  const enemySpeed = 1.3 + Math.min(score / 900, 1.1);
 
   enemies.push({
     x: zone.x + Math.random() * 120 - 60,
@@ -942,8 +942,19 @@ function checkAchievements() {
 }
 
 function drawMap() {
-  ctx.drawImage(islandMap, 0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
+  ctx.drawImage(
+    islandMap,
+    0,
+    0,
+    islandMap.width,
+    islandMap.height,
+    0,
+    0,
+    canvas.width,
+    canvas.height + 120
+  );
+
+  ctx.fillStyle = "rgba(0,0,0,0.18)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
